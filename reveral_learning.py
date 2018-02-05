@@ -7,15 +7,15 @@
 #the pkl file contains all study data as a back up including what files were used, useful for sanity checks
 #the csv file is easier to read
 #the log file also has onsets, but it has the time from when the .py file was initalized more accurate should be used for analysis
-from psychopy import visual, core, data, gui, event, data, logging
+#from psychopy import visual, core, data, gui, event, data, logging
 import csv
 import time
-import serial
+#import serial
 import numpy as N
 import sys,os,pickle
 import datetime
-import exptutils
-from exptutils import *
+#import exptutils
+#from exptutils import *
 
 monSize = [800, 600]
 info = {}
@@ -26,16 +26,16 @@ info['run']='run02'
 info['session']='pre'
 info['flavor']='SL' #Either CO or SL
 info['computer']=(os.getcwd()).split('/')[2]
-dlg = gui.DlgFromDict(info)
-if not dlg.OK:
-    core.quit()
+#dlg = gui.DlgFromDict(info)
+#if not dlg.OK:
+#    core.quit()
 #######################################
 subdata={}
 
 subdata['completed']=0
 subdata['cwd']=os.getcwd()
 
-clock=core.Clock()
+#clock=core.Clock()
 datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
 subdata['datestamp']=datestamp
 subdata['expt_title']='bevbits_reversal'
@@ -57,22 +57,22 @@ subdata['quit_key']='q'
 
 #######################################
 dataFileName='/Users/'+info['computer']+'/Documents/Output/%s_%s_%s_subdata.log'%(info['participant'],info['session'],subdata['datestamp'])
-logging.console.setLevel(logging.INFO)
-logfile=logging.LogFile(dataFileName,level=logging.DATA)
+#logging.console.setLevel(logging.INFO)
+#logfile=logging.LogFile(dataFileName,level=logging.DATA)
 ratings_and_onsets = []
 #######################################
 # Serial connection and commands setup
-ser = serial.Serial(
-                    port=info['port'],
-                    baudrate=19200,
-                    parity=serial.PARITY_NONE,
-                    stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS
-                   )
-if not ser.isOpen():
-    ser.open()
-
-time.sleep(1)
+#ser = serial.Serial(
+#                    port=info['port'],
+#                    baudrate=19200,
+#                    parity=serial.PARITY_NONE,
+#                    stopbits=serial.STOPBITS_ONE,
+#                    bytesize=serial.EIGHTBITS
+#                   )
+#if not ser.isOpen():
+#    ser.open()
+#
+#time.sleep(1)
 
 #global settings
 diameter=26.59
@@ -97,58 +97,58 @@ pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i
 
 
 
-for c in pump_setup:
-    ser.write(c)
-    time.sleep(.05)
-
+#for c in pump_setup:
+#    ser.write(c)
+#    time.sleep(.05)
+#
 
 # HELPER FUNCTIONS
-def show_instruction(instrStim):
-    # shows an instruction until a key is hit.
-    while True:
-        instrStim.draw()
-        win.flip()
-        if len(event.getKeys()) > 0:
-            break
-        event.clearEvents()
-
-
-def show_stim(stim, seconds):
-    # shows a stim for a given number of seconds
-    for frame in range(60 * seconds):
-        stim.draw()
-        win.flip()
+#def show_instruction(instrStim):
+#    # shows an instruction until a key is hit.
+#    while True:
+#        instrStim.draw()
+#        win.flip()
+#        if len(event.getKeys()) > 0:
+#            break
+#        event.clearEvents()
+#
+#
+#def show_stim(stim, seconds):
+#    # shows a stim for a given number of seconds
+#    for frame in range(60 * seconds):
+#        stim.draw()
+#        win.flip()
         
-def check_for_quit(subdata,win):
-    k=event.getKeys()
-    print 'checking for quit key %s'%subdata['quit_key']
-    print 'found:',k
-    if k.count(subdata['quit_key']) >0:# if subdata['quit_key'] is pressed...
-        print 'quit key pressed'
-        return True
-    else:
-        return False
-
-def tastes(params):
-    for c in params:
-        ser.write(c)
-        time.sleep(.05)
+#def check_for_quit(subdata,win):
+#    k=event.getKeys()
+#    print 'checking for quit key %s'%subdata['quit_key']
+#    print 'found:',k
+#    if k.count(subdata['quit_key']) >0:# if subdata['quit_key'] is pressed...
+#        print 'quit key pressed'
+#        return True
+#    else:
+#        return False
+#
+#def tastes(params):
+#    for c in params:
+#        ser.write(c)
+#        time.sleep(.05)
 
 
 # MONITOR
 #set the window size as win 
-win = visual.Window(monSize, fullscr=info['fullscr'],
-                    monitor='testMonitor', units='deg')
-
-visual_stim1=visual.ImageStim(win, image=N.zeros((300,300)),pos=(0.25,0), size=(0.25,0.25),units='height')
-visual_stim2=visual.ImageStim(win, image=N.zeros((300,300)),pos=(-0.25,0), size=(0.25,0.25),units='height')
-
-# STIMS
-fixation_text = visual.TextStim(win, text='+', pos=(0, 0), height=2)
-
-scan_trigger_text = visual.TextStim(win, text='Waiting for scan trigger...', pos=(0, 0))
+#win = visual.Window(monSize, fullscr=info['fullscr'],
+#                    monitor='testMonitor', units='deg')
+#
+#visual_stim1=visual.ImageStim(win, image=N.zeros((300,300)),pos=(0.25,0), size=(0.25,0.25),units='height')
+#visual_stim2=visual.ImageStim(win, image=N.zeros((300,300)),pos=(-0.25,0), size=(0.25,0.25),units='height')
+#
+## STIMS
+#fixation_text = visual.TextStim(win, text='+', pos=(0, 0), height=2)
+#
+#scan_trigger_text = visual.TextStim(win, text='Waiting for scan trigger...', pos=(0, 0))
 #ImageStim(win, image=None, mask=None, units='', pos=(0.0, 0.0), size=None, ori=0.0, color=(1.0, 1.0, 1.0), colorSpace='rgb', contrast=1.0, opacity=1.0, depth=0, interpolate=False, flipHoriz=False, flipVert=False, texRes=128, name=None, autoLog=None, maskParams=None)
-tastes(pump_phases)
+#tastes(pump_phases)
 
 
 #####################
@@ -177,17 +177,21 @@ print(trialcond,'trial conditions')
 
 
 # specify lists of stimulus positions and their corresponding responses:
-positions = [[-0.5, 0.0], [0.5, 0.0], [0.0, -0.5], [0.0, 0.5]]
-responses = ['left', 'right', 'down', 'up'] 
+#set contingency that the sweet is rewarding
+#positions = [[0.25,0], [-0.25,0]]
+pump[trialcond==1]=1 #tasty
+pump[trialcond==2]=2 #nottasty
+stim_images=['CO.jpg','UCO.jpg']
+responses = ['sweet', 'unsweet'] 
 
 # create a list of indices to those lists, which will
 # get shuffled on each trial:
-indices = [0, 1, 2, 3]
+indices = [0, 1]
 
 # randomise locations for this trial:
 shuffle(indices)
 
-matchPos = positions[indices[0]]
+sweetPos = positions[indices[0]]
 mis1Pos = positions[indices[1]]
 mis2Pos = positions[indices[2]]
 mis3Pos = positions[indices[3]]
@@ -203,25 +207,6 @@ pump=N.zeros(ntrials)
 pump[trialcond==0]=0 #water pump
 pump[trialcond==1]=1 #sweet pump
 pump[trialcond==2]=2 #unsweet pump
-
-
-trialcond=N.zeros(24).astype('int')
-
-trialcond[0:8]=0     # water cue, water delivery
-trialcond[8:12]=1    # water cue, juice delivery
-trialcond[12:20]=2   # juice cue, juice delivery
-trialcond[20:24]=3   # juice cue, water delivery
-stim_images=['bottled_water.jpg','bottled_water.jpg','tampico.jpg','tampico.jpg']
-ntrials=len(trialcond)
-pump=N.zeros(ntrials)
-
-N.random.shuffle(trialcond)
-
-
-
-
-
-
 
 
 
