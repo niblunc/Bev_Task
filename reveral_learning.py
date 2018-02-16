@@ -60,7 +60,7 @@ subdata['conds']='/Users/'+info['computer']+'/Documents/bevbit_task/rev_onset_fi
 subdata['quit_key']='q'
 
 #######################################
-dataFileName='/Users/'+info['computer']+'/Documents/Output/%s_%s_%s_subdata.log'%(info['participant'],info['session'],subdata['datestamp'])
+dataFileName='/Users/'+info['computer']+'/Documents/Output/%s_%s_subdata.log'%(info['participant'],subdata['datestamp'])
 logging.console.setLevel(logging.INFO)
 logfile=logging.LogFile(dataFileName,level=logging.DATA)
 #######################################
@@ -194,7 +194,7 @@ pump=N.zeros(ntrials)
 #set contingency that the sweet is rewarding
 positions = [(0.25,0), (-0.25,0)]
 positions_eng = ['right','left']
-positions_scan=['0','1']
+positions_scan=['2','1']
 pos_ind = [0,1]
 
 #this is setting the flip cycler, this allows for the switch when the correct response threshold has been obtained
@@ -324,7 +324,7 @@ def run_block(initial_cor,correct_response,flip,fix):
         
         while clock.getTime()<(trialdata['onset']+cue_time):#show the image, while clock is less than onset and cue, show cue
             pass
-        keys = event.getKeys(timeStamped=RT)
+        keys = event.getKeys(keyList=['1','2'], timeStamped=RT)
         message=visual.TextStim(win, text='')#blank screen while the taste is delivered
         message.draw()
         win.flip()
@@ -354,10 +354,10 @@ def run_block(initial_cor,correct_response,flip,fix):
                 ratings_and_onsets.append(["injecting via pump at address %d"%taste, t, keys[0][0]])
                 #trigger pump with the numeral from the dictonary above 
                 ser.write('%dRUN\r'%taste)    
-            elif keys[0][0] == '0':
+            elif keys[0][0] == '2':
                 #from the dictonary get the pump associated with the right key press
-                taste=int(mydict['0'][1])
-                image=(mydict['0'][0])
+                taste=int(mydict['2'][1])
+                image=(mydict['2'][0])
                 #log the time, keypress, and pump 
                 print 'injecting via pump at address %s'%taste
                 logging.log(logging.DATA,"injecting via pump at address %d and a keypress of %s and image of %s"%(taste,keys[0][0], image))
