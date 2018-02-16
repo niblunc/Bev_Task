@@ -1,4 +1,4 @@
-# taste task. 2/15/2018
+# taste task. 2/16/2018
 #this is the reversal learning task for BEVBITS (formerly Juice)
 #water is pump 0
 #sweet is pump 1
