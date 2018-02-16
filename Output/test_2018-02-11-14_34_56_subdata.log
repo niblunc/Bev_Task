@@ -1,0 +1,19 @@
+7.6181 	DATA 	Keypress: o
+7.6186 	Level start key press 	25
+7.7077 	Level a.jpg at position=right and e.jpg at position=left 	25
+9.6204 	DATA 	Keypress: left
+9.6409 	Level keypress=left at time= 1.898260 	25
+12.1441 	Level finished 	25
+12.1730 	Level f.jpg at position=left and a.jpg at position=right 	25
+34.6200 	DATA 	Keypress: left
+34.6433 	Level keypress=left at time= 1.976773 	25
+37.1234 	DATA 	Keypress: escape
+37.1453 	Level finished 	25
+37.1864 	Level c.jpg at position=left and b.jpg at position=right 	25
+51.6207 	DATA 	Keypress: q
+53.6215 	DATA 	Keypress: q
+53.6239 	DATA 	Keypress: q
+53.6378 	Level keypress=q at time= -0.017216 	25
+54.1241 	DATA 	Keypress: q
+56.1235 	DATA 	Keypress: q
+56.1383 	Level finished 	25
