@@ -110,6 +110,10 @@ pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\
 for c in pump_setup:
     ser.write(c)
     time.sleep(.05)
+ 
+for c in pump_phases:
+    ser.write(c)
+    time.sleep(.25)
 
 
 # HELPER FUNCTIONS
@@ -139,11 +143,11 @@ def check_for_quit(subdata,win):
     else:
         return False
 
-def tastes(params):
-    for c in params:
-        ser.write(c)
-        time.sleep(.05)
-
+#def tastes(params):
+#    for c in params:
+#        ser.write(c)
+#        time.sleep(.05)
+#
 
 # MONITOR set up
 # set the window size as win 
