@@ -93,7 +93,7 @@ rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
 #
 pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r']
 pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_H2O,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_H2O,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
-pump_phases2=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_rinse,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_rinse,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
+#pump_phases2=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_rinse,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_rinse,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
 #pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i%s'%(mls_rinse,str), '0DIA%.2fMH\r'%diameter]
 
 
@@ -101,6 +101,10 @@ pump_phases2=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF
 for c in pump_setup:
     ser.write(c)
     time.sleep(.05)
+
+for c in pump_phases:
+    ser.write(c)
+    time.sleep(.25)
 
 
 # HELPER FUNCTIONS
@@ -130,10 +134,10 @@ def check_for_quit(subdata,win):
     else:
         return False
 
-def tastes(params):
-    for c in params:
-        ser.write(c)
-        time.sleep(.0005)
+#def tastes(params):
+#    for c in params:
+#        ser.write(c)
+#        time.sleep(.0005)
 
 
 # MONITOR
@@ -224,7 +228,7 @@ def run_block():
                 wr.writerow(row)
             exptutils.shut_down_cleanly(subdata,win)
             sys.exit()
-        tastes(pump_phases)
+#        tastes(pump_phases)
         trialdata={}
         trialdata['onset']=onsets[trial]
         visual_stim.setImage(stim_images[trialcond[trial]])#set which image appears
@@ -264,7 +268,7 @@ def run_block():
         
         trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
         print(trialdata['dis'])
-        tastes(pump_phases2)
+#        tastes(pump_phases2)
         
         
         if pump[trial]==0:
