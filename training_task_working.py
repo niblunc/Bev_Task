@@ -81,7 +81,7 @@ mls_unsweet=3.0
 mls_H2O=3.0
 mls_rinse=1.0
 delivery_time=6.0
-cue_time=2.0
+cue_time=1.0
 wait_time=2.0
 rinse_time=3.0
 
