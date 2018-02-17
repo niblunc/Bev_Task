@@ -81,7 +81,7 @@ mls_unsweet=3.0
 mls_H2O=3.0
 mls_rinse=1.0
 delivery_time=6.0
-cue_time=2.0
+cue_time=3.0
 wait_time=2.0
 rinse_time=3.0
 
@@ -214,6 +214,16 @@ def run_block():
     for trial in range(ntrials):
         if check_for_quit(subdata,win):
             exptutils.shut_down_cleanly(subdata,win)
+            subdata.update(info)
+            f=open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.pkl'%datestamp,'wb')
+            pickle.dump(subdata,f)
+            f.close()
+
+            myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%datestamp.format(**info), 'wb')
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr.writerow(['event','data'])
+            for row in ratings_and_onsets:
+                wr.writerow(row)
             sys.exit()
         
         trialdata={}
@@ -226,6 +236,7 @@ def run_block():
         ratings_and_onsets.append(["image=%s"%stim_images[trialcond[trial]],t])
         visual_stim.draw()#making image of the logo appear
         logging.log(logging.DATA, "image=%s"%stim_images[trialcond[trial]])
+        tastes(pump_phases)
             
         while clock.getTime()<trialdata['onset']:
             pass
@@ -300,7 +311,7 @@ def run_block():
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
             subdata['trialdata'][trial]=trialdata
-            tastes(pump_phases)
+#            tastes(pump_phases)
     win.close()
 
 
