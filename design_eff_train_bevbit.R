@@ -15,11 +15,11 @@ rinse_time=3.0
 
 tot_iti=cue_time+wait_time+rinse_time
 # Things that don't change
-water<-rep(0,9)
-sweet<-rep(1,16)
-unsweet<-rep(2,16)
+water<-rep(0,8)
+sweet<-rep(1,8)
+unsweet<-rep(2,8)
 all<-c(water, sweet, unsweet)
-ntrials.total = 9+16+16
+ntrials.total = 24
 
 dur = rep(delivery_time, ntrials.total)#length of stimulus of interest
 #min and max jitter values possible
@@ -123,6 +123,6 @@ fake.data = rnorm(length(water))
 mod.fake = lm(fake.data ~ water.best + sweet.best)
 vif(mod.fake)
 
-write.table(ons.save[,,best][,1], "/Users/gracer/Documents/bevbit_task/onset_files/pre/onsets_run01.txt", row.names = F,col.names = F, sep="\t")
-write.table(ons.save[,,best][,2], "/Users/gracer/Documents/bevbit_task/onset_files/pre/jitter_run01.txt", row.names = F, col.names = F, sep="\t")
-write.table(ons.save[,,best][,3], "/Users/gracer/Documents/bevbit_task/onset_files/pre/conds_run01.txt", row.names = F, col.names = F, sep="\t")
+write.table(ons.save[,,best][,1], "/Users/gracer/Documents/bevbit_task/onset_files/pre/onsets_run01", row.names = F,col.names = F, sep="\t")
+write.table(ons.save[,,best][,2], "/Users/gracer/Documents/bevbit_task/onset_files/pre/jitter_run01", row.names = F, col.names = F, sep="\t")
+write.table(ons.save[,,best][,3], "/Users/gracer/Documents/bevbit_task/onset_files/pre/conds_run01", row.names = F, col.names = F, sep="\t")
