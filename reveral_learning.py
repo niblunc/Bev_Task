@@ -197,9 +197,17 @@ positions_eng = ['right','left']
 positions_scan=['2','1']
 pos_ind = [0,1]
 
+#Which flavor are we gonna be using?
+if info['flavor']=='CO':
+    stim_cycle=cycle([['CO.jpg','UCO.jpg'],['UCO.jpg','CO.jpg']])
+
+else:
+    stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
+
+
 #this is setting the flip cycler, this allows for the switch when the correct response threshold has been obtained
 #this is NOT random, make sure the order is how you want
-stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
+#stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
 
 #this index allows us to switch which key press is associated with which side, while maintaing the image to pump pair
 indices=[0,1]
