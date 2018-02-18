@@ -10,7 +10,7 @@ n.loop = 10
 ###make sure these match the script
 delivery_time=6.0
 cue_time=3.0
-wait_time=2.0
+wait_time=6.0
 rinse_time=3.0
 
 tot_iti=cue_time+wait_time+rinse_time
@@ -23,8 +23,8 @@ ntrials.total = 9+16+16
 
 dur = rep(delivery_time, ntrials.total)#length of stimulus of interest
 #min and max jitter values possible
-min=1
-max=7
+min=4
+max=11
 #everything not jitter and not of interest (cue+wait+rinse)
 iti_inital=wait_time+cue_time+rinse_time
 iti_hard = rep(iti_inital+max, ntrials.total) #if using a random iti, you need to include this and the onsets into the loop

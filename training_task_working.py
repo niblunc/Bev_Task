@@ -81,7 +81,7 @@ mls_unsweet=3.0
 mls_H2O=3.0
 mls_rinse=1.0
 delivery_time=6.0
-cue_time=3.0
+cue_time=2.0
 wait_time=2.0
 rinse_time=3.0
 
@@ -192,7 +192,7 @@ subdata['trialdata']={}
     The main run block!
 """
 
-def run_block():
+def run_block(onsets):
 
     # Await scan trigger
     while True:
@@ -214,16 +214,6 @@ def run_block():
     for trial in range(ntrials):
         if check_for_quit(subdata,win):
             exptutils.shut_down_cleanly(subdata,win)
-            subdata.update(info)
-            f=open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.pkl'%datestamp,'wb')
-            pickle.dump(subdata,f)
-            f.close()
-
-            myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%datestamp.format(**info), 'wb')
-            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-            wr.writerow(['event','data'])
-            for row in ratings_and_onsets:
-                wr.writerow(row)
             sys.exit()
         
         trialdata={}
@@ -236,7 +226,6 @@ def run_block():
         ratings_and_onsets.append(["image=%s"%stim_images[trialcond[trial]],t])
         visual_stim.draw()#making image of the logo appear
         logging.log(logging.DATA, "image=%s"%stim_images[trialcond[trial]])
-        tastes(pump_phases)
             
         while clock.getTime()<trialdata['onset']:
             pass
@@ -266,7 +255,11 @@ def run_block():
         
         trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
         print(trialdata['dis'])
+        start = time.time()
         tastes(pump_phases2)
+        end = time.time()
+        x=end - start
+        print(end - start)
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
             pass
         
@@ -276,7 +269,11 @@ def run_block():
             win.flip()
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
-            
+            start = time.time()
+            tastes(pump_phases)
+            end = time.time()
+            y=end - start
+            print(end - start)
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
         
@@ -284,7 +281,7 @@ def run_block():
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
             subdata['trialdata'][trial]=trialdata
-            tastes(pump_phases)
+            
         else:
             message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
             message.draw()
@@ -303,11 +300,18 @@ def run_block():
             win.flip()
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
+            start = time.time()
+            tastes(pump_phases)
+            end = time.time()
+            y=end - start
+            print(end - start)
+            z=x+y
+            
 
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
-        
             t = clock.getTime()
+            onsets = [i+z for i in onsets]
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
             subdata['trialdata'][trial]=trialdata
@@ -315,7 +319,7 @@ def run_block():
     win.close()
 
 
-run_block()
+run_block(onsets)
 
 subdata.update(info)
 f=open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.pkl'%datestamp,'wb')
