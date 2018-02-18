@@ -198,16 +198,13 @@ positions_scan=['2','1']
 pos_ind = [0,1]
 
 #Which flavor are we gonna be using?
+#this is setting the flip cycler, this allows for the switch when the correct response threshold has been obtained
+#this is NOT random, make sure the order is how you want
 if info['flavor']=='CO':
     stim_cycle=cycle([['CO.jpg','UCO.jpg'],['UCO.jpg','CO.jpg']])
 
 else:
     stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
-
-
-#this is setting the flip cycler, this allows for the switch when the correct response threshold has been obtained
-#this is NOT random, make sure the order is how you want
-#stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
 
 #this index allows us to switch which key press is associated with which side, while maintaing the image to pump pair
 indices=[0,1]
@@ -288,11 +285,10 @@ def run_block(initial_cor,correct_response,flip,fix):
             initial_cor=random.randint(2,4)
             flip.append(initial_cor)
             logging.log(logging.DATA, 'New flip %i'%(initial_cor))
+            logging.flush()
             correct_response=[]
-        
-        
-        
-        
+
+
         #shuffle the positions
         shuffle(pos_ind)
         visual_stim1=visual.ImageStim(win, image=N.zeros((300,300)),pos=positions[pos_ind[0]], size=(0.25,0.25),units='height')
@@ -343,7 +339,6 @@ def run_block(initial_cor,correct_response,flip,fix):
         
         
         # get the key press logged, and time stamped 
-        
         if len(keys)>0:
             rt.append(keys[0][1])
             logging.log(logging.DATA, "keypress=%s RT= %f"%(keys[0][0],keys[0][1]))
@@ -372,6 +367,37 @@ def run_block(initial_cor,correct_response,flip,fix):
                     total=sum(correct_response)
                     logging.log(logging.DATA,"correct responses %f"%(total))
                     logging.flush()
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
+                            pass
+                
+                message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#this lasts throught the wait
+                message.draw()
+                win.flip()
+                t = clock.getTime()
+                ratings_and_onsets.append(["wait", t])
+                trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
+                print(trialdata['dis'])
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
+                    pass
+                message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
+                message.draw()
+                win.flip()
+                        
+                print 'injecting rinse via pump at address %d'%0
+                t = clock.getTime()
+                ratings_and_onsets.append(['injecting rinse via pump at address %d'%0, t])
+                ser.write('%dRUN\r'%0)
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time):
+                    pass
+        
+                message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
+                message.draw()
+                win.flip()
+                t = clock.getTime()
+                ratings_and_onsets.append(["jitter", t])
+        
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
+                    pass
             elif keys[0][0] == '2':
                 #from the dictonary get the pump associated with the right key press
                 taste=int(mydict['2'][1])
@@ -388,6 +414,38 @@ def run_block(initial_cor,correct_response,flip,fix):
                     total=sum(correct_response)
                     logging.log(logging.DATA,"correct responses %f"%(total))
                     logging.flush()
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
+                    pass
+                message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#this lasts throught the wait
+                message.draw()
+                win.flip()
+                t = clock.getTime()
+                ratings_and_onsets.append(["wait", t])
+                trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
+                print(trialdata['dis'])
+                
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
+                    pass
+        
+                message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
+                message.draw()
+                win.flip()
+                        
+                print 'injecting rinse via pump at address %d'%0
+                t = clock.getTime()
+                ratings_and_onsets.append(['injecting rinse via pump at address %d'%0, t])
+                ser.write('%dRUN\r'%0)
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time):
+                    pass
+        
+                message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
+                message.draw()
+                win.flip()
+                t = clock.getTime()
+                ratings_and_onsets.append(["jitter", t])
+        
+                while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
+                    pass
         else:
             taste=0
             t = clock.getTime()
@@ -397,61 +455,20 @@ def run_block(initial_cor,correct_response,flip,fix):
             message=visual.TextStim(win, text='Please answer quicker', pos=(0, 0), height=2)#this lasts throught the taste
             message.draw()
             win.flip()
+            while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time):
+                pass
 
+            message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
+            message.draw()
+            win.flip()
 
-        while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
-            pass
-        
-        message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#this lasts throught the wait
-        message.draw()
-        win.flip()
-        t = clock.getTime()
-        ratings_and_onsets.append(["wait", t])
-        
-        
-        
-        trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
-        print(trialdata['dis'])
-        
-        while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
-            pass
-       
-        message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
-        message.draw()
-        win.flip()
-                
-        print 'injecting rinse via pump at address %d'%0
-        t = clock.getTime()
-        ratings_and_onsets.append(['injecting rinse via pump at address %d'%0, t])
-        ser.write('%dRUN\r'%0)
-        
-      
-        
-        while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time):
-            pass
-
-        message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
-        message.draw()
-        win.flip()
-        t = clock.getTime()
-        ratings_and_onsets.append(["jitter", t])
-
-        while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
-            pass
-        
         t = clock.getTime()
         ratings_and_onsets.append(['end time', t])
         logging.log(logging.DATA,"finished")
         logging.flush()
         subdata['trialdata'][trial]=trialdata
 
-#        for i in range(0, len(key_responses)):
-#            message = '%s:%s' % (i, key_responses[i])
-#            logging.log(logging.DATA,message)
 
-#        for i in range(0, len(correct_response)):
-#            message = '%s:%s' % (i, correct_response[i])
-#            logging.log(logging.DATA,message)
         print(key_responses)
         print(correct_response)
         if len(correct_response) > 0:
@@ -464,7 +481,7 @@ def run_block(initial_cor,correct_response,flip,fix):
         else:
             logging.log(logging.DATA,"no key responses")
         logging.flush()
-        
+
 
         subdata['key_responses']=key_responses
         subdata['rt']=rt
