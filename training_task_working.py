@@ -1,4 +1,4 @@
-# taste task. 1/25/2018
+# taste task. 2/18/2018
 #this is for BEVBITS (formerly Juice)
 #water is pump 0
 #sweet is pump 1
@@ -90,7 +90,7 @@ rate_sweet = mls_sweet*(3600.0/delivery_time)  # mls/hour 300
 rate_unsweet = mls_unsweet*(3600.0/delivery_time)  # mls/hour 300
 rate_H2O = mls_H2O*(3600.0/delivery_time)  # mls/hour 300
 rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
-#
+
 pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r']
 pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_H2O,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_H2O,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
 pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i%s'%(mls_rinse,str), '0DIA%.2fMH\r'%diameter]
@@ -226,14 +226,14 @@ def run_block(onsets):
         trialdata={}
         trialdata['onset']=onsets[trial]
         logging.log(logging.DATA, "onset of trial =%f"%trialdata['onset'])
-        ratings_and_onsets.append("image=%f"%trialdata['onset'])
+        ratings_and_onsets.append(["onset =%f"%trialdata['onset']])
         logging.flush()
         
         visual_stim.setImage(stim_images[trialcond[trial]])#set which image appears
         print trial
         print 'condition %d'%trialcond[trial]
         print 'showing image: %s'%stim_images[trialcond[trial]]
-        t = clock.getTime()
+        
         
         visual_stim.draw()#setting the image
         
@@ -241,7 +241,7 @@ def run_block(onsets):
         while clock.getTime()<trialdata['onset']:
             pass
         win.flip()#showing the image of the stimulus
-        
+        t = clock.getTime()
         logging.log(logging.DATA, "image=%s"%stim_images[trialcond[trial]])
         ratings_and_onsets.append(["image=%s"%stim_images[trialcond[trial]],t])
         logging.flush()
