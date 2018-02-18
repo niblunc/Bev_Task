@@ -135,6 +135,8 @@ def tastes(params):
         time.sleep(.05)
 
 
+
+
 # MONITOR
 win = visual.Window(monSize, fullscr=info['fullscr'],
                     monitor='testMonitor', units='deg')
@@ -193,7 +195,7 @@ subdata['trialdata']={}
 """
 
 def run_block(onsets):
-
+    logger=init_logger()
     # Await scan trigger
     while True:
         scan_trigger_text.draw()
@@ -218,31 +220,44 @@ def run_block(onsets):
         
         trialdata={}
         trialdata['onset']=onsets[trial]
+        logging.log(logging.DATA, "onset of trial =%f"%trialdata['onset'])
+        ratings_and_onsets.append(["image=%f"%trialdata['onset'])
+        logging.flush()
+        
         visual_stim.setImage(stim_images[trialcond[trial]])#set which image appears
         print trial
         print 'condition %d'%trialcond[trial]
         print 'showing image: %s'%stim_images[trialcond[trial]]
         t = clock.getTime()
-        ratings_and_onsets.append(["image=%s"%stim_images[trialcond[trial]],t])
-        visual_stim.draw()#making image of the logo appear
-        logging.log(logging.DATA, "image=%s"%stim_images[trialcond[trial]])
-            
+        
+        visual_stim.draw()#setting the image
+        
+        
         while clock.getTime()<trialdata['onset']:
             pass
-        win.flip()
-            
+        win.flip()#showing the image of the stimulus
+        
+        logging.log(logging.DATA, "image=%s"%stim_images[trialcond[trial]])
+        ratings_and_onsets.append(["image=%s"%stim_images[trialcond[trial]],t])
+        logging.flush()
+        
         while clock.getTime()<(trialdata['onset']+cue_time):#show the image
             pass
 
         message=visual.TextStim(win, text='')#blank screen while the taste is delivered
         message.draw()
-        win.flip()
+        win.flip()#making the blank screen appear
 
         print 'injecting via pump at address %d'%pump[trial]
+        
         logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
+        logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
+        start = time.time()
         ser.write('%dRUN\r'%pump[trial])
+        end = time.time()
+        print([end - start,'time to send cmd to pump'])
 
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
             pass
@@ -252,6 +267,7 @@ def run_block(onsets):
         win.flip()
         t = clock.getTime()
         ratings_and_onsets.append(["wait", t])
+        logging.flush()
         
         trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
         print(trialdata['dis'])
@@ -260,6 +276,7 @@ def run_block(onsets):
         end = time.time()
         x=end - start
         print(end - start)
+        
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
             pass
         
@@ -267,19 +284,25 @@ def run_block(onsets):
             message=visual.TextStim(win, text='NO RINSE', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
+            logging.log(logging.DATA, "NO RINSE")
+            logging.flush()
+            
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
+            
             start = time.time()
             tastes(pump_phases)
             end = time.time()
             y=end - start
             print(end - start)
+            
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
         
             t = clock.getTime()
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
+            logging.flush()
             subdata['trialdata'][trial]=trialdata
             
         else:
@@ -291,6 +314,8 @@ def run_block(onsets):
             t = clock.getTime()
             ratings_and_onsets.append(['injecting rinse via pump at address %d'%0, t])
             ser.write('%dRUN\r'%0)
+            logging.log(logging.DATA, "RINSE")
+            logging.flush()
         
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time):
                 pass
@@ -311,11 +336,12 @@ def run_block(onsets):
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
             t = clock.getTime()
-            onsets = [i+z for i in onsets]
+            onsets = [i+z for i in onsets] #reset the onsets correcting for time to get the csmds to the pumps
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
+            logging.flush()
             subdata['trialdata'][trial]=trialdata
-#            tastes(pump_phases)
+            
     win.close()
 
 
@@ -332,5 +358,5 @@ wr.writerow(['event','data'])
 for row in ratings_and_onsets:
     wr.writerow(row)
 
-
+logging.shutdown()
 core.quit()
