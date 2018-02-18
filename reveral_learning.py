@@ -143,11 +143,7 @@ def check_for_quit(subdata,win):
     else:
         return False
 
-#def tastes(params):
-#    for c in params:
-#        ser.write(c)
-#        time.sleep(.05)
-#
+
 
 # MONITOR set up
 # set the window size as win 
@@ -281,7 +277,7 @@ def run_block(initial_cor,correct_response,flip,fix):
         if len(correct_response)>initial_cor:
             stim_images=stim_cycle.next()
             logging.log(logging.DATA, 'FLIP %s %s'%(stim_images[0],stim_images[1]))
-            initial_cor=random.randint(3,5)
+            initial_cor=random.randint(2,4)
             flip.append(initial_cor)
             logging.log(logging.DATA, 'New flip %i'%(initial_cor))
             correct_response=[]
@@ -317,22 +313,25 @@ def run_block(initial_cor,correct_response,flip,fix):
         
         
         #this is logging when the message is shown
-        logging.log(logging.DATA, "%s at position=%s and %s at position=%s"%(stim_images[indices[0]],positions_eng[pos_ind[0]],stim_images[indices[1]],positions_eng[pos_ind[1]]))
-        
-        
         while clock.getTime()<trialdata['onset']:
             pass
         win.flip()
+        
+        logging.log(logging.DATA, "images %s at position=%s and %s at position=%s"%(stim_images[indices[0]],positions_eng[pos_ind[0]],stim_images[indices[1]],positions_eng[pos_ind[1]]))
+        logging.flush()
         
         RT.reset() # reaction time starts immediately after flip 
         
         while clock.getTime()<(trialdata['onset']+cue_time):#show the image, while clock is less than onset and cue, show cue
             pass
         keys = event.getKeys(keyList=['1','2'],timeStamped=RT)
+        
         message=visual.TextStim(win, text='')#blank screen while the taste is delivered
         message.draw()
         win.flip()
+        
         print(keys)
+        logging.flush()
         
         
         # get the key press logged, and time stamped 
@@ -340,6 +339,7 @@ def run_block(initial_cor,correct_response,flip,fix):
         if len(keys)>0:
             rt.append(keys[0][1])
             logging.log(logging.DATA, "keypress=%s RT= %f"%(keys[0][0],keys[0][1]))
+            logging.flush()
             print("here are the keys:")
             print(keys)
             t = clock.getTime()
@@ -354,12 +354,16 @@ def run_block(initial_cor,correct_response,flip,fix):
                 #log the pump used, time, and key press
                 print 'injecting via pump at address %s'%taste
                 logging.log(logging.DATA,"injecting via pump at address %d and a keypress of %s and image of %s"%(taste,keys[0][0],image))
+                logging.flush()
                 t = clock.getTime()
                 ratings_and_onsets.append(["injecting via pump at address %d"%taste, t, keys[0][0]])
                 #trigger pump with the numeral from the dictonary above 
-                ser.write('%dRUN\r'%taste)    
+                ser.write('%dRUN\r'%taste)
                 if taste == 1:
                     correct_response.append(1)
+                    total=sum(correct_response)
+                    logging.log(logging.DATA,"correct responses %f"%(total))
+                    logging.flush()
             elif keys[0][0] == '2':
                 #from the dictonary get the pump associated with the right key press
                 taste=int(mydict['2'][1])
@@ -373,19 +377,20 @@ def run_block(initial_cor,correct_response,flip,fix):
                 ser.write('%dRUN\r'%taste)
                 if taste == 1:
                     correct_response.append(1)
+                    total=sum(correct_response)
+                    logging.log(logging.DATA,"correct responses %f"%(total))
+                    logging.flush()
         else:
             taste=0
             t = clock.getTime()
             logging.log(logging.DATA,"Key Press Missed!")
+            logging.flush()
             keys=keys.append(['MISS',t])
             message=visual.TextStim(win, text='Please answer quicker', pos=(0, 0), height=2)#this lasts throught the taste
             message.draw()
             win.flip()
-            
-#        if taste == 1
-#            correct_response.append(1)
-            
-                
+
+
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
             pass
         
@@ -429,12 +434,30 @@ def run_block(initial_cor,correct_response,flip,fix):
         t = clock.getTime()
         ratings_and_onsets.append(['end time', t])
         logging.log(logging.DATA,"finished")
+        logging.flush()
         subdata['trialdata'][trial]=trialdata
-        
-      
-        
+
+#        for i in range(0, len(key_responses)):
+#            message = '%s:%s' % (i, key_responses[i])
+#            logging.log(logging.DATA,message)
+
+#        for i in range(0, len(correct_response)):
+#            message = '%s:%s' % (i, correct_response[i])
+#            logging.log(logging.DATA,message)
         print(key_responses)
         print(correct_response)
+        if len(correct_response) > 0:
+            logging.log(logging.DATA,"correct responses %i"%correct_response[-1])
+        else:
+            logging.log(logging.DATA,"no correct responses")
+
+        if len(key_responses) > 0:
+            logging.log(logging.DATA,"key presses %f"%key_responses[-1][0])
+        else:
+            logging.log(logging.DATA,"no key responses")
+        logging.flush()
+        
+
         subdata['key_responses']=key_responses
         subdata['rt']=rt
 
