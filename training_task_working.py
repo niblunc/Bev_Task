@@ -188,6 +188,7 @@ else:
     stim_images=['water.jpg', 'SL.jpg', 'USL.jpg']
 
 subdata['trialdata']={}
+myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%datestamp.format(**info), 'wb')
 
             
 """
@@ -195,7 +196,7 @@ subdata['trialdata']={}
 """
 
 def run_block(onsets):
-    logger=init_logger()
+    
     # Await scan trigger
     while True:
         scan_trigger_text.draw()
@@ -216,12 +217,16 @@ def run_block(onsets):
     for trial in range(ntrials):
         if check_for_quit(subdata,win):
             exptutils.shut_down_cleanly(subdata,win)
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr.writerow(['event','data'])
+            for row in ratings_and_onsets:
+                wr.writerow(row)
             sys.exit()
         
         trialdata={}
         trialdata['onset']=onsets[trial]
         logging.log(logging.DATA, "onset of trial =%f"%trialdata['onset'])
-        ratings_and_onsets.append(["image=%f"%trialdata['onset'])
+        ratings_and_onsets.append("image=%f"%trialdata['onset'])
         logging.flush()
         
         visual_stim.setImage(stim_images[trialcond[trial]])#set which image appears
@@ -341,7 +346,7 @@ def run_block(onsets):
             logging.log(logging.DATA,"finished")
             logging.flush()
             subdata['trialdata'][trial]=trialdata
-            
+
     win.close()
 
 
@@ -352,11 +357,10 @@ f=open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.pkl'%datesta
 pickle.dump(subdata,f)
 f.close()
 
-myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%datestamp.format(**info), 'wb')
 wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 wr.writerow(['event','data'])
 for row in ratings_and_onsets:
     wr.writerow(row)
 
-logging.shutdown()
+
 core.quit()
