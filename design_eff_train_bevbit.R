@@ -5,11 +5,11 @@ library(HH)
 ## ------------------------------------------------------------------------
 
 #############################
-n.loop = 50000
+n.loop = 10
 
 ###make sure these match the script
 delivery_time=6.0
-cue_time=2.0
+cue_time=1.0
 wait_time=6.0
 rinse_time=3.0
 

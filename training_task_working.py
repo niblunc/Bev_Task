@@ -39,7 +39,7 @@ subdata['cwd']=os.getcwd()
 clock=core.Clock()
 datestamp=datetime.datetime.now().strftime("%Y-%m-%d-%H_%M_%S")
 subdata['datestamp']=datestamp
-subdata['expt_title']='bromo_probabilistic'
+subdata['expt_title']='BBX_training_probabilistic'
 
 subdata['response']={}
 subdata['score']={}
@@ -82,7 +82,7 @@ mls_unsweet=3.0
 mls_H2O=3.0
 mls_rinse=1.0
 delivery_time=6.0
-cue_time=2.0
+cue_time=1.0
 wait_time=2.0
 rinse_time=3.0
 
@@ -92,7 +92,7 @@ rate_unsweet = mls_unsweet*(3600.0/delivery_time)  # mls/hour 300
 rate_H2O = mls_H2O*(3600.0/delivery_time)  # mls/hour 300
 rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
 
-pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r']
+pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r','3VOL ML\r']
 pump_phases=['0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter,'3DIA%.2fMH\r'%diameter,
 '0CLDINF\r','1CLDINF\r','2CLDINF\r','3CLDINF\r'
 '0PHN01\r','1PHN01\r', '2PHN01\r','3PHN01\r'
@@ -149,7 +149,7 @@ visual_stim=visual.ImageStim(win, image=N.zeros((300,300)), size=(0.75,0.75),uni
 # STIMS
 fixation_text = visual.TextStim(win, text='+', pos=(0, 0), height=2)
 
-scan_trigger_text = visual.TextStim(win, text='Waiting for scan trigger...', pos=(0, 0))
+scan_trigger_text = visual.TextStim(win, text='During this scan you are going to get tastes of water and 2 beverages. Please pay attention to the logos and the tastes', pos=(0, 0))
 
 tastes(pump_phases)
 
