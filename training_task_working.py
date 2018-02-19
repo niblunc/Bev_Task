@@ -3,6 +3,7 @@
 #water is pump 0
 #sweet is pump 1
 #notsweet is pump 2
+#rinse is pump 3
 #TR 2 sec
 #the pkl file contains all study data as a back up including what files were used, useful for sanity checks
 #the csv file is easier to read
@@ -56,7 +57,7 @@ subdata['conds']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/
 subdata['quit_key']='q'
 
 #######################################
-dataFileName='/Users/'+info['computer']+'/Documents/Output/%s_%s_%s_subdata.log'%(info['participant'],info['session'],subdata['datestamp'])
+dataFileName='/Users/'+info['computer']+'/Documents/Output/%s_%s_%s_%s_subdata.log'%(info['participant'],info['run'],info['session'],subdata['datestamp'])
 logging.console.setLevel(logging.INFO)
 logfile=logging.LogFile(dataFileName,level=logging.DATA)
 ratings_and_onsets = []
@@ -92,9 +93,13 @@ rate_H2O = mls_H2O*(3600.0/delivery_time)  # mls/hour 300
 rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
 
 pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r']
-pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_H2O,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_H2O,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
-#pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i%s'%(mls_rinse,str), '0DIA%.2fMH\r'%diameter]
-
+pump_phases=['0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter,'3DIA%.2fMH\r'%diameter,
+'0CLDINF\r','1CLDINF\r','2CLDINF\r','3CLDINF\r'
+'0PHN01\r','1PHN01\r', '2PHN01\r','3PHN01\r'
+'0DIRINF\r','1DIRINF\r','2DIRINF\r','3DIRINF\r'
+'0RAT%iMH\r'%rate_H2O,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'3RAT%iMH\r'%rate_rinse,
+'0VOL%i%s'%(mls_H2O,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'3VOL%i%s'%(mls_rinse,str)
+]
 
 
 for c in pump_setup:
@@ -188,7 +193,7 @@ else:
     stim_images=['water.jpg', 'SL.jpg', 'USL.jpg']
 
 subdata['trialdata']={}
-myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%datestamp.format(**info), 'wb')
+myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_training_subdata_%s.csv'%datestamp.format(**info), 'wb')
 
             
 """
@@ -309,7 +314,7 @@ def run_block():
             print 'injecting rinse via pump at address %d'%0
             t = clock.getTime()
             ratings_and_onsets.append(['injecting rinse via pump at address %d'%0, t])
-            ser.write('%dRUN\r'%0)
+            ser.write('%dRUN\r'%3)
             logging.log(logging.DATA, "RINSE")
             logging.flush()
         
@@ -327,7 +332,7 @@ def run_block():
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
             t = clock.getTime()
-            onsets = [i+z for i in onsets] #reset the onsets correcting for time to get the csmds to the pumps
+            
             ratings_and_onsets.append(['end time', t])
             logging.log(logging.DATA,"finished")
             logging.flush()
