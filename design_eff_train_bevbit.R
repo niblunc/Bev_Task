@@ -5,12 +5,12 @@ library(HH)
 ## ------------------------------------------------------------------------
 
 #############################
-n.loop = 10
+n.loop = 50000
 
 ###make sure these match the script
 delivery_time=6.0
 cue_time=1.0
-wait_time=6.0
+wait_time=2.0
 rinse_time=3.0
 
 tot_iti=cue_time+wait_time+rinse_time
@@ -123,6 +123,6 @@ fake.data = rnorm(length(water))
 mod.fake = lm(fake.data ~ water.best + sweet.best)
 vif(mod.fake)
 
-write.table(ons.save[,,best][,1], "/Users/gracer/Documents/bevbit_task/onset_files/pre/onsets_run04", row.names = F,col.names = F, sep="\t")
-write.table(ons.save[,,best][,2], "/Users/gracer/Documents/bevbit_task/onset_files/pre/jitter_run04", row.names = F, col.names = F, sep="\t")
-write.table(ons.save[,,best][,3], "/Users/gracer/Documents/bevbit_task/onset_files/pre/conds_run04", row.names = F, col.names = F, sep="\t")
+write.table(ons.save[,,best][,1], "/Users/gracer/Documents/bevbit_task/onset_files/post/onsets_run04", row.names = F,col.names = F, sep="\t")
+write.table(ons.save[,,best][,2], "/Users/gracer/Documents/bevbit_task/onset_files/post/jitter_run04", row.names = F, col.names = F, sep="\t")
+write.table(ons.save[,,best][,3], "/Users/gracer/Documents/bevbit_task/onset_files/post/conds_run04", row.names = F, col.names = F, sep="\t")
