@@ -93,7 +93,7 @@ rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
 
 pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r']
 pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\r','0DIRINF\r','1DIRINF\r','2DIRINF\r','0RAT%iMH\r'%rate_H2O,'1RAT%iMH\r'%rate_sweet,'2RAT%iMH\r'%rate_unsweet,'0VOL%i%s'%(mls_H2O,str), '1VOL%i%s'%(mls_sweet,str),'2VOL%i%s'%(mls_unsweet,str),'0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter]
-pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i%s'%(mls_rinse,str), '0DIA%.2fMH\r'%diameter]
+#pump_phases2=['0PHN02\r','0CLDINF\r','0DIRINF\r','0RAT%iMH\r'%rate_rinse,'0VOL%i%s'%(mls_rinse,str), '0DIA%.2fMH\r'%diameter]
 
 
 
@@ -195,7 +195,7 @@ myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.csv'%
     The main run block!
 """
 
-def run_block(onsets):
+def run_block():
     
     # Await scan trigger
     while True:
@@ -259,11 +259,10 @@ def run_block(onsets):
         logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
-        start = time.time()
+        
         ser.write('%dRUN\r'%pump[trial])
-        end = time.time()
-        print([end - start,'time to send cmd to pump'])
-
+        
+        
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
             pass
         
@@ -276,11 +275,7 @@ def run_block(onsets):
         
         trialdata['dis']=[ser.write('0DIS\r'),ser.write('1DIS\r')]
         print(trialdata['dis'])
-        start = time.time()
-        tastes(pump_phases2)
-        end = time.time()
-        x=end - start
-        print(end - start)
+
         
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time):
             pass
@@ -295,11 +290,7 @@ def run_block(onsets):
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
             
-            start = time.time()
-            tastes(pump_phases)
-            end = time.time()
-            y=end - start
-            print(end - start)
+
             
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
                 pass
@@ -330,12 +321,7 @@ def run_block(onsets):
             win.flip()
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
-            start = time.time()
-            tastes(pump_phases)
-            end = time.time()
-            y=end - start
-            print(end - start)
-            z=x+y
+
             
 
             while clock.getTime()<(trialdata['onset']+cue_time+delivery_time+wait_time+rinse_time+jitter[trial]):
@@ -350,7 +336,7 @@ def run_block(onsets):
     win.close()
 
 
-run_block(onsets)
+run_block()
 
 subdata.update(info)
 f=open('/Users/'+info['computer']+'/Documents/Output/BBX_subdata_%s.pkl'%datestamp,'wb')
