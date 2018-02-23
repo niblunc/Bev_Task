@@ -188,9 +188,9 @@ pump[trialcond==1]=1 #sweet pump
 pump[trialcond==2]=2 #unsweet pump
 
 if info['flavor']=='CO':
-    stim_images=['water.png','CO.png','UCO.png']
+    stim_images=['water.jpg','CO.jpg','UCO.jpg']
 else:
-    stim_images=['water.png', 'SL.png', 'USL.png']
+    stim_images=['water.jpg', 'SL.jpg', 'USL.jpg']
 
 subdata['trialdata']={}
 myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_training_subdata_%s.csv'%datestamp.format(**info), 'wb')
@@ -275,6 +275,8 @@ def run_block():
         message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#this lasts throught the wait
         message.draw()
         win.flip()
+        logging.log(logging.DATA,"start wait")
+        logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["wait", t])
         logging.flush()
@@ -287,7 +289,7 @@ def run_block():
             pass
         
         if pump[trial]==0:
-            message=visual.TextStim(win, text='NO RINSE', pos=(0, 0), height=2)#lasts through the jitter 
+            message=visual.TextStim(win, text=' ', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
             logging.log(logging.DATA, "NO RINSE")
@@ -308,7 +310,7 @@ def run_block():
             subdata['trialdata'][trial]=trialdata
             
         else:
-            message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
+            message=visual.TextStim(win, text=' ', pos=(0, 0), height=2)#this lasts throught the rinse 
             message.draw()
             win.flip()
                 
@@ -325,6 +327,8 @@ def run_block():
             message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
+            logging.log(logging.DATA,"Start Jitter")
+            logging.flush()
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
 
