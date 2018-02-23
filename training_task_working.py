@@ -12,7 +12,7 @@ from psychopy import visual, core, data, gui, event, data, logging
 import csv
 import time
 import serial
-import numpy as N
+import numpy as N 
 import sys,os,pickle
 import datetime
 import exptutils
@@ -50,7 +50,7 @@ subdata['is_this_SS_trial']={}
 subdata['SS']={}
 subdata['broke_on_trial']={}
 subdata['simulated_response']=False
-
+#
 subdata['onset']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/onsets_'+info['run']
 subdata['jitter']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/jitter_'+info['run']
 subdata['conds']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/conds_'+info['run']
@@ -188,9 +188,9 @@ pump[trialcond==1]=1 #sweet pump
 pump[trialcond==2]=2 #unsweet pump
 
 if info['flavor']=='CO':
-    stim_images=['water.jpg','CO.jpg','UCO.jpg']
+    stim_images=['water.png','CO.png','UCO.png']
 else:
-    stim_images=['water.jpg', 'SL.jpg', 'USL.jpg']
+    stim_images=['water.png', 'SL.png', 'USL.png']
 
 subdata['trialdata']={}
 myfile = open('/Users/'+info['computer']+'/Documents/Output/BBX_training_subdata_%s.csv'%datestamp.format(**info), 'wb')
@@ -264,7 +264,8 @@ def run_block():
         logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
-        
+        logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
+        logging.flush()
         ser.write('%dRUN\r'%pump[trial])
         
         
