@@ -93,7 +93,7 @@ cue_time=2.0
 wait_time=2.0
 rinse_time=3.0
 initial_cor=2
-fix=int(2)
+fix=int(8)
 flip.append(initial_cor)
 
 str='\r'
@@ -201,10 +201,10 @@ pos_ind = [0,1]
 #this is setting the flip cycler, this allows for the switch when the correct response threshold has been obtained
 #this is NOT random, make sure the order is how you want
 if info['flavor']=='CO':
-    stim_cycle=cycle([['CO.ai','UCO.ai'],['UCO.ai','CO.ai']])
+    stim_cycle=cycle([['CO.jpg','UCO.jpg'],['UCO.jpg','CO.jpg']])
 
 else:
-    stim_cycle=cycle([['SL.ai','USL.ai'],['USL.ai','SL.ai']])
+    stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.ai','SL.jpg']])
 
 #this index allows us to switch which key press is associated with which side, while maintaing the image to pump pair
 indices=[0,1]
