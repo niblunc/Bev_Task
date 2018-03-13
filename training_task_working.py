@@ -12,7 +12,7 @@ from psychopy import visual, core, data, gui, event, data, logging
 import csv
 import time
 import serial
-import numpy as N
+import numpy as N 
 import sys,os,pickle
 import datetime
 import exptutils
@@ -50,7 +50,7 @@ subdata['is_this_SS_trial']={}
 subdata['SS']={}
 subdata['broke_on_trial']={}
 subdata['simulated_response']=False
-
+#
 subdata['onset']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/onsets_'+info['run']
 subdata['jitter']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/jitter_'+info['run']
 subdata['conds']='/Users/'+info['computer']+'/Documents/bevbit_task/onset_files/'+info['session']+'/conds_'+info['run']
@@ -264,7 +264,8 @@ def run_block():
         logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
-        
+        logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
+        logging.flush()
         ser.write('%dRUN\r'%pump[trial])
         logging.log(logging.DATA,"post injecting via pump at address %d"%pump[trial])
         
@@ -309,7 +310,7 @@ def run_block():
             subdata['trialdata'][trial]=trialdata
             
         else:
-            message=visual.TextStim(win, text='RINSE', pos=(0, 0), height=2)#this lasts throught the rinse 
+            message=visual.TextStim(win, text=' ', pos=(0, 0), height=2)#this lasts throught the rinse 
             message.draw()
             win.flip()
                 
@@ -326,7 +327,8 @@ def run_block():
             message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
-            logging.log(logging.DATA,"jitter")
+            logging.log(logging.DATA,"Start Jitter")
+            logging.flush()
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
 
