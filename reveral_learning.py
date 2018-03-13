@@ -204,7 +204,7 @@ if info['flavor']=='CO':
     stim_cycle=cycle([['CO.jpg','UCO.jpg'],['UCO.jpg','CO.jpg']])
 
 else:
-    stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.ai','SL.jpg']])
+    stim_cycle=cycle([['SL.jpg','USL.jpg'],['USL.jpg','SL.jpg']])
 
 #this index allows us to switch which key press is associated with which side, while maintaing the image to pump pair
 indices=[0,1]
