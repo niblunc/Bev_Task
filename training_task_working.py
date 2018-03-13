@@ -1,4 +1,4 @@
-# taste task. 2/18/2018
+# taste task. 3/13/2018
 #this is for BEVBITS (formerly Juice)
 #water is pump 0
 #sweet is pump 1
@@ -25,7 +25,7 @@ info['port'] = '/dev/tty.usbserial'
 info['participant'] = 'test'
 info['run']='run01'
 info['session']='pre'
-info['flavor']='SL' #Either CO or SL
+info['flavor']='' #Either CO or SL
 info['computer']=(os.getcwd()).split('/')[2]
 dlg = gui.DlgFromDict(info)
 if not dlg.OK:
@@ -104,7 +104,7 @@ pump_phases=['0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%dia
 
 for c in pump_setup:
     ser.write(c)
-    time.sleep(.05)
+    time.sleep(.25)
 
 
 # HELPER FUNCTIONS
@@ -137,7 +137,7 @@ def check_for_quit(subdata,win):
 def tastes(params):
     for c in params:
         ser.write(c)
-        time.sleep(.05)
+        time.sleep(.25)
 
 
 
@@ -266,6 +266,7 @@ def run_block():
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
         
         ser.write('%dRUN\r'%pump[trial])
+        logging.log(logging.DATA,"post injecting via pump at address %d"%pump[trial])
         
         
         while clock.getTime()<(trialdata['onset']+cue_time+delivery_time):
@@ -274,6 +275,7 @@ def run_block():
         message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#this lasts throught the wait
         message.draw()
         win.flip()
+        logging.log(logging.DATA,"start wait")
         t = clock.getTime()
         ratings_and_onsets.append(["wait", t])
         logging.flush()
@@ -286,7 +288,7 @@ def run_block():
             pass
         
         if pump[trial]==0:
-            message=visual.TextStim(win, text='NO RINSE', pos=(0, 0), height=2)#lasts through the jitter 
+            message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
             logging.log(logging.DATA, "NO RINSE")
@@ -324,6 +326,7 @@ def run_block():
             message=visual.TextStim(win, text='+', pos=(0, 0), height=2)#lasts through the jitter 
             message.draw()
             win.flip()
+            logging.log(logging.DATA,"jitter")
             t = clock.getTime()
             ratings_and_onsets.append(["jitter", t])
 
