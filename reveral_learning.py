@@ -1,4 +1,4 @@
-# taste task. 2/16/2018
+# taste task. 3/12/2018
 #this is the reversal learning task for BEVBITS (formerly Juice)
 #water is pump 0
 #sweet is pump 1
@@ -26,8 +26,8 @@ info = {}
 info['fullscr'] = False
 info['port'] = '/dev/tty.usbserial'
 info['participant'] = 'test'
-info['run']='run02'
-info['flavor']='SL' #Either CO or SL
+info['run']='run0'
+info['flavor']='' #Either CO or SL
 info['computer']=(os.getcwd()).split('/')[2]
 
 dlg = gui.DlgFromDict(info)
@@ -109,7 +109,7 @@ pump_phases=['0PHN01\r','1PHN01\r', '2PHN01\r','0CLDINF\r','1CLDINF\r','2CLDINF\
 #send the parameters to the pumps
 for c in pump_setup:
     ser.write(c)
-    time.sleep(.05)
+    time.sleep(.25)
  
 for c in pump_phases:
     ser.write(c)
