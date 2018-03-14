@@ -33,7 +33,7 @@ ignore = ['DATA 	Keypress: o','Level post injecting via pump at address']
 #files = [file for file in os.listdir(".") if (file.lower().endswith('.log'))]
 #files.sort(key=os.path.getmtime)
 
-for file in glob.glob(os.path.join(basepath,'BBX*.log')):
+for file in glob.glob(os.path.join(basepath,'RL*.log')):
     print(file)
 
     sub=file.split('/')[5].split('_')[0]
@@ -43,16 +43,15 @@ for file in glob.glob(os.path.join(basepath,'BBX*.log')):
 
     with open(file,'r') as infile:
         cue_onsets=[]
-        TT_onset=[]  
-        UU_onset=[]
-        NN_onset=[]
-        tasty_cue_onsets=[]
-        tasty_cue=[]  
-        nottasty_cue_onsets=[]
-        nottasty_cue=[]
-        neu_cue_onsets=[]
-        neu_cue=[]
+        choice_ons=[]
+        sweet_ons=[]
+        unsweet_ons=[]
+        PE=[]
+        RE=[]
+        FRE=[]
         rinse=[]
+        miss=[]
+        RT=[]
         start_time=None
         
         for x in infile.readlines():
@@ -67,34 +66,23 @@ for file in glob.glob(os.path.join(basepath,'BBX*.log')):
                 if x.find('Level start key press')>-1:#find the start
                     l_s=x.strip().split()
                     start_time=float(l_s[0])
-                if x.find('Level image')>-1:
+                if x.find('Level images')>-1:
                     l_s=x.strip().split()
                     print(l_s)
                     cue_onsets.append(float(l_s[0]))
-                    cues.append(l_s[2])
-                    
-                    if l_s[2] == 'image=SL.jpg' or l_s[2] == 'image=CO.jpg':
-                        tasty_cue.append(l_s[2])
-                        tasty_cue_onsets.append(float(l_s[0]))
-                    if l_s[2] == 'image=USL.jpg' or l_s[2] == 'image=UCO.jpg':
-                        nottasty_cue.append(l_s[2])
-                        nottasty_cue_onsets.append(float(l_s[0]))
-                    if l_s[2] == 'image=water.jpg':
-                        neu_cue.append(l_s[2])
-                        neu_cue_onsets.append(float(l_s[0]))
-                if x.find('Level injecting via pump at address ')>-1:#find the tasty image
+                if x.find('	DATA 	Keypress: ')>-1:
                     l_s=x.strip().split()
                     print(l_s)
-                    
-                    if l_s[7] == '0':
-                        NN_onset.append(l_s[0])
-                    if l_s[7] == '1':
-                        TT_onset.append(l_s[0])
-                    if l_s[7] == '2':
-                        UU_onset.append(l_s[0])
+                    pdb.set_trace()
+                    if l_s[3] == '1':
+                        sweet_ons.append(l_s[0])
+                    if l_s[3] == '2':
+                        unsweet_ons.append(l_s[0])
                 if x.find('Level RINSE 	25')>-1:
                     rinse.append(l_s[0])
-                
+                if x.find('Level Key Press Missed! 	25')>-1:
+                    miss.append(l_s[0])
+                    
         r_onsets=(numpy.asarray(rinse,dtype=float))-start_time 
         TT_onsets=(numpy.asarray(TT_onset,dtype=float))-start_time 
         UU_onsets=(numpy.asarray(UU_onset,dtype=float))-start_time
