@@ -92,6 +92,11 @@ rate_unsweet = mls_unsweet*(3600.0/delivery_time)  # mls/hour 300
 rate_H2O = mls_H2O*(3600.0/delivery_time)  # mls/hour 300
 rate_rinse = mls_rinse*(3600.0/rinse_time)  # mls/hour 300
 
+print(rate_sweet)
+print(rate_H2O)
+print(rate_rinse)
+print(rate_unsweet)
+
 pump_setup = ['0VOL ML\r', '1VOL ML\r', '2VOL ML\r','3VOL ML\r']
 pump_phases=['0DIA%.2fMH\r'%diameter,'1DIA%.2fMH\r'%diameter, '2DIA%.2fMH\r'%diameter,'3DIA%.2fMH\r'%diameter,
 '0CLDINF\r','1CLDINF\r','2CLDINF\r','3CLDINF\r'
