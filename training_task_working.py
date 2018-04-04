@@ -11,8 +11,8 @@
 from psychopy import visual, core, data, gui, event, data, logging
 import csv
 import time
-import serial
-import numpy as N 
+import serial12122211
+import numpy as N ooooooo
 import sys,os,pickle
 import datetime
 import exptutils
@@ -265,8 +265,8 @@ def run_block():
 
         print 'injecting via pump at address %d'%pump[trial]
         
-        logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
-        logging.flush()
+#        logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
+#        logging.flush()
         t = clock.getTime()
         ratings_and_onsets.append(["injecting via pump at address %d"%pump[trial], t])
         logging.log(logging.DATA,"injecting via pump at address %d"%pump[trial])
