@@ -1,4 +1,4 @@
-# taste task. 3/23/2018
+# taste task. 4/4/2018
 #this is for BEVBITS (formerly Juice)
 #water is pump 0
 #sweet is pump 1
@@ -11,8 +11,8 @@
 from psychopy import visual, core, data, gui, event, data, logging
 import csv
 import time
-import serial12122211
-import numpy as N ooooooo
+import serial
+import numpy as N 
 import sys,os,pickle
 import datetime
 import exptutils

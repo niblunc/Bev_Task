@@ -1,0 +1,9 @@
+GES 4/4/2018
+two occasions the BBX training task has stopped working
+closing the application worked to jog it
+the first instance was during a training run01
+-stopped on a SL
+- didn’t finish block 420.6532-40.8767=379.7765
+the second instance was during a training run02
+- stopped on a CO
+- finished entire block 287.1529-65.3003=221.8526
